@@ -10,3 +10,7 @@ Primeiro trabalho prático para a disciplina de Organização e Arquitetura de C
 2. Tratar exceções associadas ao programa implementado: sobretudo, valores digitados inválidos, e o fato de que o número de entrada deve ser estritamente positivo. A saber, números negativos na arquitetura MIPS são implementados com complemento de 2.
 
 3. Imprimir, na saída padrão, o número de entrada convertido para a base informada, podendo - então - ser um inteiro ou uma string: neste caso, terá 32B se a base for binária, ou 8B, se ela for hexadecimal.
+
+## Metodologia
+
+Quatro funções: a principal (main); uma de conversão de uma "string", em binário, para um valor inteiro; uma de conversão de uma "string", em hexadecimal, para um valor inteiro; uma de conversão de um decimal para uma impressão em quaisquer das outras duas bases.
