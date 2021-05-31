@@ -9,7 +9,7 @@ binaryString:		.asciiz "00000000000000000000000000000000"
 
 # Procedimento principal
 main:
-	# Impressão da mensagem inicial
+	# ImpressÃ£o da mensagem inicial
 	li $v0, 4
 	la $a0, wellcomeMessage
 	syscall
@@ -18,25 +18,25 @@ main:
 	li $v0, 5
 	syscall
 	
-	# Conversão inteiro-binário
+	# ConversÃ£o inteiro-binÃ¡rio
 	move $a0, $v0
 	la $a1, binaryString
 	jal int_to_bin_str
 	
-	# Impressão da string binária
+	# ImpressÃ£o da string binÃ¡ria
 	li $v0, 4
 	la $a0, binaryString
 	syscall
 	
-	# Saída do programa
+	# SaÃ­da do programa
 	li $v0, 10
 	syscall
 			
-# Converte um valor inteiro para uma string binária
-# Parâmetros:
+# Converte um valor inteiro para uma string binÃ¡ria
+# ParÃ¢metros:
 #	$a0: valor inteiro a ser convertido
-#	$a1: endereço inicial da string contendo 5 caracteres
-#	$ra: endereço de retorno
+#	$a1: endereÃ§o inicial da string contendo 32 caracteres
+#	$ra: endereÃ§o de retorno
 int_to_bin_str:
 	
 	# Armazena os argumentos na pilha
@@ -48,55 +48,55 @@ int_to_bin_str:
 	# Constante 2
 	li $s0, 2
 	
-	# Impede que o laço seja percorrido mais do que 32 vezes
+	# Impede que o laÃ§o seja percorrido mais do que 32 vezes
 	li $s1, 32
 	
-	# Itera enquanto o valor inteiro não for igual a 1
+	# Itera enquanto o valor inteiro nÃ£o for igual a 1
 	int_to_bin_str_loop:
 		
 		# Divide o valor inteiro por 2
-		# Módulo salvo em $t1
+		# MÃ³dulo salvo em $t1
 		lw $t0, 0 ($sp)
 		divu $t0, $s0
 		mflo $t0
 		mfhi $t1
 		sw $t0, 0 ($sp)
 		
-		# Altera o módulo para valor de caractere
+		# Altera o mÃ³dulo para valor de caractere
 		addi $t1, $t1, '0'
 		
-		# Recupera o endereço da string da pilha
+		# Recupera o endereÃ§o da string da pilha
 		lw $t0, 4 ($sp)
 		
-		# Atualiza o byte da string para o módulo da divisão
+		# Atualiza o byte da string para o mÃ³dulo da divisÃ£o
 		sb $t1, 31 ($t0)
 		
-		# Decrementa o endereço da string
+		# Decrementa o endereÃ§o da string
 		addi $t0, $t0, -1
 		
-		# Empilha o endereço da string
+		# Empilha o endereÃ§o da string
 		sw $t0, 4 ($sp)
 		
-		# Validação do laço: iterador igual a 0
+		# ValidaÃ§Ã£o do laÃ§o: iterador igual a 0
 		beq $s1, $zero, int_to_bin_str_loop_exit
 		
 		# Decrementa o iterador
 		addi $s1, $s1, -1
 		
-		# Validação do laço: inteiro igual a 0
+		# ValidaÃ§Ã£o do laÃ§o: inteiro igual a 0
 		lw $t0, 0 ($sp)
 		beq $t0, $zero, int_to_bin_str_loop_exit	
 		
-		# Retorno do laço
+		# Retorno do laÃ§o
 		j int_to_bin_str_loop	
 	
-	# Saída do laço
+	# SaÃ­da do laÃ§o
 	int_to_bin_str_loop_exit:
 		
 		# Desempilhamento
 		lw $ra, 8 ($sp)
 		addi $sp, $sp, 12
 		
-		# Retorno da função
+		# Retorno da funÃ§Ã£o
 		jr $ra
 	
