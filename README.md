@@ -18,4 +18,5 @@ Quatro funções: a principal (main); uma de conversão de uma "string", em bin�
 ## Compilação
 
 O programa utilizado para compilação fora o [Mars 4.5](https://courses.missouristate.edu/KenVollmar/MARS/). Para compilar todos os arquivos de extensão "asm" em um diretório, basta aplicar a configuração correspondente como mostrado na figura a seguir: 
+
 ![settings](img/compile.png)
