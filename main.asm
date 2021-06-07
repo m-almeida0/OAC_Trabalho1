@@ -50,9 +50,26 @@ main:
 	add $a0, $t0, $sp
 	lw $a1, chunkSize
 	syscall
-	
+		
 	# Salva o caractere em $s0
 	lb $s0, ($a0)
+	
+	# Valida a base de entrada
+	beq $s0, 'B', main_select_bin_input
+	beq $s0, 'D', main_select_dec_input
+	beq $s0, 'H', main_select_hex_input
+	j invalid_base_exception
+	
+	# Seleção do rótulo a seguir para a base de entrada
+	main_select_bin_input:
+		la $s0, bin_input_base
+		j main_exit_input_selection
+	main_select_dec_input:
+		la $s0, dec_input_base
+		j main_exit_input_selection
+	main_select_hex_input:
+		la $s0, hex_input_base
+	main_exit_input_selection:
 	
 	# Requisita a inserção do número
 	li $v0, 4
@@ -70,10 +87,7 @@ main:
 	syscall
 	
 	# Chaveia em relação à base selecionada
-	beq $s0, 'B', bin_input_base
-	beq $s0, 'D', dec_input_base
-	beq $s0, 'H', hex_input_base
-	j invalid_base_exception
+	jr $s0
 	
 	# Base de entrada binária
 	bin_input_base:
@@ -84,16 +98,26 @@ main:
 		add $a0, $t0, $sp
 		jal validate_and_preprocess_binary
 		move $t0, $v0
-		move $t1, $v1
 		
 		# Validação de formato
-		beq $t1, 1, main_start_bin_len_val
+		bgt $t0, 0, main_start_bin_len_val
 		j invalid_number_exception
 		
 		# Validação de tamanho
 		main_start_bin_len_val:
-			blt $t0, 33, main_output_base_select
+			blt $t0, 33, main_exit_bin_len_val
 			j too_big_number_exception
+		main_exit_bin_len_val:
+		
+		# Gera o decimal intermediário e o empilha
+		lw $t1, chunkSize
+		addi $t1, $t1, 4
+		add $a0, $t1, $sp
+		move $a1, $t0
+		jal TODO
+		sw $v0, 0 ($sp)
+		
+		j main_output_base_select
 	
 	# Base de entrada decimal
 	dec_input_base:
@@ -104,10 +128,9 @@ main:
 		add $a0, $t0, $sp
 		jal validate_and_preprocess_decimal
 		move $t0, $v0
-		move $t1, $v1
 	
 		# Validação de formato
-		beq $t1, 1, main_start_dec_len_val
+		bgt $t0, 0, main_start_dec_len_val
 		j invalid_number_exception
 		
 		# Validação de tamanho e geração do número correspondente
@@ -126,7 +149,7 @@ main:
 			jal atoui
 			sw $v0, 0 ($sp)
 			
-			j main_output_base_select_skip_decimal
+			j main_output_base_select
 	
 	# Base de entrada hexadecimal
 	hex_input_base:
@@ -140,17 +163,15 @@ main:
 		move $t1, $v1
 		
 		# Validação de formato
-		beq $t1, 1, main_start_hex_len_val
+		bgt $t0, 0, main_start_hex_len_val
 		j invalid_number_exception
 		
 		# Validação de tamanho
 		main_start_hex_len_val:
-			blt $t0, 9, main_output_base_select
+			blt $t0, 9, main_exit_hex_len_val
 			j too_big_number_exception
-	
-	# Seleção da base de saída
-	main_output_base_select:
-	
+		main_exit_hex_len_val:
+		
 		# Gera o decimal intermediário e o empilha
 		lw $t1, chunkSize
 		addi $t1, $t1, 4
@@ -158,8 +179,9 @@ main:
 		move $a1, $t0
 		jal TODO
 		sw $v0, 0 ($sp)
-		
-		main_output_base_select_skip_decimal:
+	
+	# Seleção da base de saída
+	main_output_base_select:
 	
 		# Impressão da mensagem de solicitação
 		li $v0, 4
@@ -195,7 +217,7 @@ main:
 	bin_output_base:
 		lw $a0, 0 ($sp)
 		li $a1, 2
-		jal TODO2
+		jal imprimir_inteiro_na_base
 		j main_exit
 	
 	# Base de saída decimal
@@ -209,7 +231,7 @@ main:
 	hex_output_base:
 		lw $a0, 0 ($sp)
 		li $a1, 16
-		jal TODO2
+		jal imprimir_inteiro_na_base
 		j main_exit
 		
 	# Exceção de base inválida
@@ -246,11 +268,4 @@ main:
 # CONVERSÃO PARA DECIMAL INTERMEDIÁRIO
 TODO:
 	li $v0, 100
-	jr $ra
-	
-# IMPRESSÃO NA BASE SOLICITADA
-TODO2:
-	li $v0, 1
-	li $a0, 99999
-	syscall
 	jr $ra

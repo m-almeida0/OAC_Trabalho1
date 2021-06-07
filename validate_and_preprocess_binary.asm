@@ -2,22 +2,18 @@
 	.globl validate_and_preprocess_binary
 	
 # Valida uma string contendo caracteres binários e remove o terminador de linha 
-# se ele existir. Ao final, informa se é ou não válida quanto à base binária e, 
-# em caso positivo, retorna também o comprimento efetivo dela.
+# se ele existir. Todavia, se a string informada for inválida em relação à base 
+# binária, retornará 0 como comprimento.
 #
 # Parâmetros: 
 #	- $a0: endereço do primeiro byte da string
 #	- $ra: endereço de retorno para o local de chamada
 # Retorno: 
-#	- $v0: comprimento efetivo da string informada
-#	- $v1: booleano: 1 se a string for consistente em relação à base, 0 se não
+#	- $v0: comprimento efetivo da string ou 0 se ela for inválida
 validate_and_preprocess_binary:
 	
 	# Registro que calculará o tamanho da string
 	move $s0, $zero
-	
-	# Inicia assumindo a string como válida
-	li $v1, 1
 	
 	validate_and_preprocess_binary_start_loop:
 
@@ -43,7 +39,6 @@ validate_and_preprocess_binary:
 		
 		# Aplica a invalidação da string se necessário
 		validate_and_preprocess_binary_invalidation:
-			li $v1, 0
 			li $s0, 0
 			j validate_and_preprocess_binary_exit_loop
 		
