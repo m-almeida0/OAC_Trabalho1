@@ -14,3 +14,8 @@ Primeiro trabalho prático para a disciplina de Organização e Arquitetura de C
 ## Metodologia
 
 Quatro funções: a principal (main); uma de conversão de uma "string", em binário, para um valor inteiro; uma de conversão de uma "string", em hexadecimal, para um valor inteiro; uma de conversão de um decimal para uma impressão em quaisquer das outras duas bases.
+
+## Compilação
+
+O programa utilizado para compilação fora o [Mars 4.5](https://courses.missouristate.edu/KenVollmar/MARS/). Para compilar todos os arquivos de extensão "asm" em um diretório, basta aplicar a configuração correspondente como mostrado na figura a seguir: 
+![settings](https://github.com/jlrconstantino/OAC_Trabalho1/img/compile.png?raw=true)
