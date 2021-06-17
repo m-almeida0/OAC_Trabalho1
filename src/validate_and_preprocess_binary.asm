@@ -21,7 +21,8 @@ validate_and_preprocess_binary:
 		lb $t0, 0 ($a0)
 		beq $t0, $zero, validate_and_preprocess_binary_exit_loop
 		beq $t0, '\n', validate_and_preprocess_binary_cut_endline
-		bne $t0, '0', validate_and_preprocess_binary_check_one
+		blt $t0, '0', validate_and_preprocess_binary_invalidation
+		bgt $t0, '1', validate_and_preprocess_binary_invalidation
 		
 		# Avança na leitura
 		addi $a0, $a0, 1
@@ -29,13 +30,6 @@ validate_and_preprocess_binary:
 		
 		# Volta para o início do laço
 		j validate_and_preprocess_binary_start_loop
-		
-		# Verifica validade do caractere
-		validate_and_preprocess_binary_check_one:
-			bne $t0, '1', validate_and_preprocess_binary_invalidation
-			addi $a0, $a0, 1
-			addi $s0, $s0, 1
-			j validate_and_preprocess_binary_start_loop
 		
 		# Aplica a invalidação da string se necessário
 		validate_and_preprocess_binary_invalidation:
