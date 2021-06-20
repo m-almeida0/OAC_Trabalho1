@@ -114,7 +114,7 @@ main:
 		addi $t1, $t1, 4
 		add $a0, $t1, $sp
 		move $a1, $t0
-		jal TODO
+		jal binary_to_decimal
 		sw $v0, 0 ($sp)
 		
 		j main_output_base_select
