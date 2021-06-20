@@ -35,7 +35,7 @@ binary_to_decimal :
 		beq $a0, $t1, register_decimal #se o enderço computado for o mesmo do inicio da string, sai do loop
 		
 		add $t2, $t2, -4
-		#usar 1 shift para esquerda em $t5
+		sll $t5, $t5, 1
 		
 		j binary_register
 	
