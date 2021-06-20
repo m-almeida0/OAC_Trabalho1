@@ -135,12 +135,15 @@ main:
 		
 		# Validação de tamanho e geração do número correspondente
 		main_start_dec_len_val:
+		
+			# Validação do tamanho
+			bgt $t0, 10, too_big_number_exception
 				
 			# Seleção da posição da string numérica
 			lw $t1, chunkSize
 			addi $t1, $t1, 4
 			
-			# Geração, verificação e empilhamento do número
+			# Geração e empilhamento do número
 			add $a0, $t1, $sp
 			move $a1, $t0
 			jal atoui
